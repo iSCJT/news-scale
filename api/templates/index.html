@@ -1,0 +1,15 @@
+<body>
+    <div>
+        PSQL Flask
+    </div>
+    <hr/>
+    <div>
+        {% for s in scrapes %}
+        <ul>
+            <li>{{s.id}} - {{s.start_time}}</li>
+        </ul>
+        {% endfor %}
+    </div>
+
+
+</body>

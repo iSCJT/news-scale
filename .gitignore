@@ -1,0 +1,7 @@
+.env
+top-stories.html
+Pipfile
+Pipfile.lock
+.DS_Store
+.venv/
+db/pg-data
