@@ -5,3 +5,4 @@ Pipfile.lock
 .DS_Store
 .venv/
 db/pg-data
+node_modules

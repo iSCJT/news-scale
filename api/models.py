@@ -1,5 +1,5 @@
 
-from sqlalchemy import create_engine, Column, ForeignKey, Boolean, Integer, BigInteger, Float, String, Text, DateTime
+from sqlalchemy import create_engine, Table, Column, ForeignKey, Boolean, Integer, BigInteger, Float, String, Text, DateTime
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 # from sqlalchemy_utils import database_exists, create_database
@@ -56,6 +56,12 @@ class Emotion(Base):
     emotion = Column(String(20), nullable=False)
     score = Column(Float, nullable=False)
 
+
+class ScrapeData(Base):
+    __tablename__ = Table('scrape_data', Base.metadata,
+                          Column('id', Integer, primary_key=True),
+                          autoload_with=db
+                          )
 
 def create():
     Base.metadata.create_all(db)

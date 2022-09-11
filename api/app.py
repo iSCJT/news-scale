@@ -3,12 +3,14 @@ from flask import Flask, request, render_template, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from dotenv import load_dotenv
+from flask_cors import CORS
 
 load_dotenv()
 
 
 # init api
 app = Flask(__name__)
+CORS(app)
 
 # print(os.getenv('DEV_DATABASE_URL'))
 
@@ -66,22 +68,35 @@ articles = Article.query.all()
 emotions = Emotion.query.all()
 
 
-@app.route('/', methods=['GET'])
+class ScrapeData(db.Model):
+    __table__ = db.Table('scrape_data', db.metadata,
+                         db.Column('id', db.Integer, primary_key=True),
+                         autoload_with=db.engine
+                         )
+
+
+scrape_data = ScrapeData.query.order_by(ScrapeData.id.desc()).first()
+
+# print(scrape_data)
+
+
+@ app.route('/', methods=['GET'])
 def get():
     return render_template('index.html', scrapes=scrapes, articles=articles, emotions=emotions)
 
 
-@app.route('/json', methods=['GET'])
+@ app.route('/json', methods=['GET'])
 def json():
-    response = [
-        {
-            'id': scrape.id,
-            'start_time': scrape.start_time,
-            'end_time': scrape.end_time,
-            'success': scrape.success
-        } for scrape in scrapes]
+    # return jsonify(scrape_data)
+    response = {
+        'id': scrape_data.id,
+        'start_time': scrape_data.start_time,
+        'end_time': scrape_data.end_time,
+        'success': scrape_data.success,
+        'articles': scrape_data.articles
+    }
 
-    return {"count": len(response), 'scrapes': response}
+    return jsonify(response)
 
 
 # run server
